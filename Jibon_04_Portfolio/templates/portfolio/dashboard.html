@@ -1,0 +1,138 @@
+{% extends 'portfolio/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <h2 style="border:none;padding:0;">Dashboard</h2>
+    <span style="font-size:14px;color:#888;">Welcome, {{ request.user.username }}</span>
+  </div>
+
+  <!-- Profile -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <h2>Profile</h2>
+      <a href="{% url 'profile_edit' %}" class="btn btn-sm">{% if profile %}Edit{% else %}Add{% endif %} Profile</a>
+    </div>
+    {% if profile %}
+    <p><strong>Name:</strong> {{ profile.name }}</p>
+    <p><strong>Title:</strong> {{ profile.title }}</p>
+    <p><strong>Email:</strong> {{ profile.email }}</p>
+    {% else %}
+    <p style="color:#888;font-size:14px;">No profile yet. Click "Add Profile" to get started.</p>
+    {% endif %}
+  </div>
+
+  <!-- Skills -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h2>Skills</h2>
+      <a href="{% url 'skill_add' %}" class="btn btn-sm">+ Add Skill</a>
+    </div>
+    {% if skills %}
+    <table>
+      <tr><th>Skill</th><th>Level</th><th>Actions</th></tr>
+      {% for s in skills %}
+      <tr>
+        <td>{{ s.name }}</td>
+        <td>{{ s.level }}%</td>
+        <td>
+          <a href="{% url 'skill_edit' s.pk %}" class="btn btn-sm btn-outline">Edit</a>
+          <a href="{% url 'skill_delete' s.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Del</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}<p style="color:#888;font-size:14px;">No skills added.</p>{% endif %}
+  </div>
+
+  <!-- Projects -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h2>Projects</h2>
+      <a href="{% url 'project_add' %}" class="btn btn-sm">+ Add Project</a>
+    </div>
+    {% if projects %}
+    <table>
+      <tr><th>Title</th><th>Tech Stack</th><th>Actions</th></tr>
+      {% for p in projects %}
+      <tr>
+        <td>{{ p.title }}</td>
+        <td>{{ p.tech_stack }}</td>
+        <td>
+          <a href="{% url 'project_edit' p.pk %}" class="btn btn-sm btn-outline">Edit</a>
+          <a href="{% url 'project_delete' p.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Del</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}<p style="color:#888;font-size:14px;">No projects added.</p>{% endif %}
+  </div>
+
+  <!-- Experience -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h2>Experience</h2>
+      <a href="{% url 'experience_add' %}" class="btn btn-sm">+ Add Experience</a>
+    </div>
+    {% if experiences %}
+    <table>
+      <tr><th>Role</th><th>Company</th><th>Period</th><th>Actions</th></tr>
+      {% for e in experiences %}
+      <tr>
+        <td>{{ e.role }}</td>
+        <td>{{ e.company }}</td>
+        <td>{{ e.start_date }} — {% if e.is_current %}Present{% else %}{{ e.end_date }}{% endif %}</td>
+        <td>
+          <a href="{% url 'experience_edit' e.pk %}" class="btn btn-sm btn-outline">Edit</a>
+          <a href="{% url 'experience_delete' e.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Del</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}<p style="color:#888;font-size:14px;">No experience added.</p>{% endif %}
+  </div>
+
+  <!-- Education -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h2>Education</h2>
+      <a href="{% url 'education_add' %}" class="btn btn-sm">+ Add Education</a>
+    </div>
+    {% if educations %}
+    <table>
+      <tr><th>Degree</th><th>Institution</th><th>Year</th><th>Actions</th></tr>
+      {% for edu in educations %}
+      <tr>
+        <td>{{ edu.degree }}</td>
+        <td>{{ edu.institution }}</td>
+        <td>{{ edu.start_year }} — {% if edu.end_year %}{{ edu.end_year }}{% else %}Present{% endif %}</td>
+        <td>
+          <a href="{% url 'education_edit' edu.pk %}" class="btn btn-sm btn-outline">Edit</a>
+          <a href="{% url 'education_delete' edu.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Del</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}<p style="color:#888;font-size:14px;">No education added.</p>{% endif %}
+  </div>
+
+  <!-- Contact Messages -->
+  <div class="card">
+    <h2>Contact Messages</h2>
+    {% if contacts %}
+    <table>
+      <tr><th>Name</th><th>Email</th><th>Subject</th><th>Date</th></tr>
+      {% for c in contacts %}
+      <tr>
+        <td>{{ c.name }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.subject }}</td>
+        <td style="font-size:12px;color:#888;">{{ c.sent_at|date:"d M Y" }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}<p style="color:#888;font-size:14px;">No messages yet.</p>{% endif %}
+  </div>
+
+</div>
+{% endblock %}

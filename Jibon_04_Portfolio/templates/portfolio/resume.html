@@ -1,0 +1,71 @@
+{% extends 'portfolio/base.html' %}
+{% block title %}Resume{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="card" id="resume">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+      <div>
+        {% if profile %}
+          <h1 style="font-size:26px;color:#1a1a2e;">{{ profile.name }}</h1>
+          <p style="color:#e94560;font-size:15px;">{{ profile.title }}</p>
+          <p style="font-size:13px;color:#555;margin-top:6px;">
+            {{ profile.email }}
+            {% if profile.phone %} &bull; {{ profile.phone }}{% endif %}
+            {% if profile.address %} &bull; {{ profile.address }}{% endif %}
+          </p>
+        {% endif %}
+      </div>
+      <button onclick="window.print()" class="btn btn-outline btn-sm" style="margin-top:4px;">Print / Save PDF</button>
+    </div>
+
+    {% if profile and profile.bio %}
+    <h2>Summary</h2>
+    <p style="font-size:14px;line-height:1.7;margin-bottom:20px;">{{ profile.bio }}</p>
+    {% endif %}
+
+    {% if skills %}
+    <h2>Skills</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+      {% for skill in skills %}
+        <span style="background:#f0f0f0;padding:4px 12px;border-radius:20px;font-size:13px;">{{ skill.name }} ({{ skill.level }}%)</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if experiences %}
+    <h2>Work Experience</h2>
+    {% for exp in experiences %}
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;">
+        <strong>{{ exp.role }}</strong>
+        <span style="font-size:13px;color:#888;">{{ exp.start_date }} — {% if exp.is_current %}Present{% else %}{{ exp.end_date }}{% endif %}</span>
+      </div>
+      <p style="color:#e94560;font-size:13px;">{{ exp.company }}</p>
+      {% if exp.description %}<p style="font-size:13px;color:#555;margin-top:4px;">{{ exp.description }}</p>{% endif %}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if educations %}
+    <h2>Education</h2>
+    {% for edu in educations %}
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;">
+        <strong>{{ edu.degree }} in {{ edu.field }}</strong>
+        <span style="font-size:13px;color:#888;">{{ edu.start_year }} — {% if edu.end_year %}{{ edu.end_year }}{% else %}Present{% endif %}</span>
+      </div>
+      <p style="font-size:13px;color:#555;">{{ edu.institution }}</p>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+  </div>
+</div>
+<style>
+@media print {
+  nav, footer, button { display: none !important; }
+  body { background: #fff; }
+  .card { box-shadow: none; }
+}
+</style>
+{% endblock %}
